@@ -701,13 +701,14 @@ class Baker(Generic[M]):
             if is_iterator(value):
                 value = next(value)
 
-            setattr(instance, field_name, value)
-            setattr(
-                instance,
-                content_type_field,
-                contenttypes_models.ContentType.objects.get_for_model(value),
-            )
-            setattr(instance, object_id_field, value.pk)
+            if value is not None:
+                setattr(instance, field_name, value)
+                setattr(
+                    instance,
+                    content_type_field,
+                    contenttypes_models.ContentType.objects.get_for_model(value),
+                )
+                setattr(instance, object_id_field, value.pk)
 
     def _remote_field(
         self, field: Union[ForeignKey, OneToOneField]
